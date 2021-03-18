@@ -1,6 +1,6 @@
-# template
+# Template
 
-A new Flutter project.
+É um projeto exemplo em Flutter e Getx login, registro e home.
 
 ## Getting Started
 
