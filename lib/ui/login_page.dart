@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:template/utils/utils.dart';
-import 'app_theme.dart';
+import '../controller/login_controller.dart';
+import '../utils/utils.dart';
+import '../utils/app_theme.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,10 +10,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final LoginController _loginController = Get.find<LoginController>();
+
   bool _obscureText = true;
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,10 +36,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       TextFormField(
-                        //controller: _loginController.emailTextController,
+                        controller: _loginController.emailTextController,
                         focusNode: _emailFocus,
                         textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (term) {
+                        onFieldSubmitted: (_) {
                           fieldFocusChange(
                               context, _emailFocus, _passwordFocus);
                         },
@@ -44,7 +48,6 @@ class _LoginPageState extends State<LoginPage> {
                             label: 'E-mail', hint: 'exemplo@google.com.br'),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
-                          // Aqui entram as validações
                           if (value.isEmpty) {
                             return "Campo obrigatório.";
                           } else if (!GetUtils.isEmail(value)) {
@@ -52,17 +55,12 @@ class _LoginPageState extends State<LoginPage> {
                           }
                           return null;
                         },
-                        //onSaved: (val) => _cpf = val,
                       ),
                       TextFormField(
-                        //controller:
-                        //_loginController.passwordTextController,
+                        controller: _loginController.passwordTextController,
                         focusNode: _passwordFocus,
-                        onFieldSubmitted: (value) {
+                        onFieldSubmitted: (_) {
                           _passwordFocus.unfocus();
-                          //if (_formKey.currentState.validate()) {
-                          //_loginController.login();
-                          //}
                         },
                         textInputAction: TextInputAction.done,
                         style: TextStyle(color: Colors.white),
@@ -96,9 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                           elevation: 0,
                           color: Colors.white,
                           onPressed: () {
-                            //if (_formKey.currentState.validate()) {
-                            //_loginController.login();
-                            //}
+                            if (_formKey.currentState.validate()) {
+                              _loginController.login();
+                            }
                           },
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(30.0),
