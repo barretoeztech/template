@@ -1,8 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
-
 import '../data/model/user_model.dart';
 
 Future<UserModel> authenticateUser(String useremail, String password) async {
@@ -14,24 +12,22 @@ Future<UserModel> authenticateUser(String useremail, String password) async {
     queryParameters: {'userEmail': '$useremail', 'userPassword': '$password'},
   );
 
-  try {
-    final response = await http.get(uri).timeout(
-      const Duration(seconds: 10),
-      onTimeout: () {
-        print("Timeout agora");
-        throw TimeoutException(
-            'The connection has timed out, Please try again!');
-      },
-    );
+  final response = await http.get(uri).timeout(
+    const Duration(seconds: 10),
+    onTimeout: () {
+      print("Timeout agora");
+      throw TimeoutException(
+          'Timeout na comunicação, por favor tente novamente');
+    },
+  );
 
-    if (response.statusCode == 200) {
-      print("Sucesso");
-      // se o servidor retornar um response OK, vamos fazer o parse no JSON
+  if (response.statusCode == 200) {
+    print("Sucesso: na busca de informações no servidor");
+    // se o servidor retornar um response OK, vamos fazer o parse no JSON
 
-      return UserModel.fromJson(json.decode(response.body)[0]);
-    }
+    return new UserModel.fromJson(json.decode(response.body)[0]);
+  } else {
+    print("Erro na busca de informações do servidor");
     throw 'Erro no json';
-  } on SocketException {
-    print("You are not connected to internet");
   }
 }

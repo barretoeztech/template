@@ -8,6 +8,7 @@ import '../provider/login_provider.dart';
 class LoginController extends GetxController {
   final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
+  UserModel _user = new UserModel();
 
   void login() async {
     Get.dialog(Center(child: CircularProgressIndicator()),
@@ -15,13 +16,20 @@ class LoginController extends GetxController {
 
     print('User Email: ${emailTextController.text}');
     print('User password: ${passwordTextController.text}');
-    await Future.delayed(const Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 500));
     try {
-      authenticateUser(emailTextController.text, passwordTextController.text);
+      _user = await authenticateUser(
+          emailTextController.text, passwordTextController.text);
+      print('User token: ${_user.userToken}');
+      Get.offAllNamed(Routes.HOME);
     } catch (e) {
       print('error');
+      Get.back();
+      Get.defaultDialog(
+          title: 'ERRO',
+          content: Text(
+              "Usuario e/ou senha não conferem") /*middleText: "Usuario errado"*/);
     }
-    Get.offAllNamed(Routes.HOME);
   }
 
   void logout() {

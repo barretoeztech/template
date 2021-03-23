@@ -13,15 +13,12 @@ class UserModel {
     String userToken,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'],
-      userName: json['userName'],
-      userEmail: json['userEmail'],
-      userPassword: json['userPassword'],
-      userToken: json['userToken'],
-    );
-  }
+  UserModel.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        userName = json['userName'],
+        userEmail = json['userEmail'],
+        userPassword = json['userPassword'],
+        userToken = json['userToken'];
 
   Map<String, dynamic> toJson() {
     return {
